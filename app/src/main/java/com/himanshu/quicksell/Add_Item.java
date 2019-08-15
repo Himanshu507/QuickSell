@@ -3,12 +3,16 @@ package com.himanshu.quicksell;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -61,6 +65,14 @@ public class Add_Item extends AppCompatActivity {
     StorageReference storageReference;
     ProgressDialog progressDialog;
 
+    String[] permissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+    };
+
+    boolean check;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add__item);
@@ -70,6 +82,7 @@ public class Add_Item extends AppCompatActivity {
         getSupportActionBar().setTitle("Add Something here..");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_down_black_24dp);
 
+        check = checkPermissions();
         init_Views();
         setCategory();
         Btn_Clicks();
@@ -332,7 +345,9 @@ public class Add_Item extends AppCompatActivity {
         galleryTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openVideo();
+                if (check) {
+                    openVideo();
+                }
                 alertDialog.dismiss();
             }
         });
@@ -340,7 +355,9 @@ public class Add_Item extends AppCompatActivity {
         cameraTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openCameraIntent();
+                if (check) {
+                    openCameraIntent();
+                }
                 alertDialog.dismiss();
             }
         });
@@ -441,6 +458,34 @@ public class Add_Item extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    private boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == 100) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // do something
+            }
+            return;
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
