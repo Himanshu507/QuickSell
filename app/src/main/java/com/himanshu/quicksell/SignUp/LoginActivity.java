@@ -133,7 +133,6 @@ public class LoginActivity extends AppCompatActivity {
     public void SignInGoogle(View view) {
         Intent i = googleSignInClient.getSignInIntent();
         startActivityForResult(i, GOOGLE_SIGN);
-
     }
 
     @Override

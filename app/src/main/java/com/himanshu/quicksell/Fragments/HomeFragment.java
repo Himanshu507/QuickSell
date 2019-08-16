@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     List<Add_item_model> items_list = new ArrayList<>();
     ViewGroup temp;
-    Main_Views_Adapter  main_views_adapter;
+    Main_Views_Adapter main_views_adapter;
 
 
     @Override

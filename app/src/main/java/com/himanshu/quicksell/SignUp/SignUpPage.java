@@ -176,7 +176,6 @@ public class SignUpPage extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-
         if (user != null) {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

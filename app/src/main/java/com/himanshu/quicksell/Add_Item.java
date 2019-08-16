@@ -345,9 +345,7 @@ public class Add_Item extends AppCompatActivity {
         galleryTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (check) {
-                    openVideo();
-                }
+                openVideo();
                 alertDialog.dismiss();
             }
         });
@@ -355,9 +353,7 @@ public class Add_Item extends AppCompatActivity {
         cameraTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (check) {
-                    openCameraIntent();
-                }
+                openCameraIntent();
                 alertDialog.dismiss();
             }
         });
