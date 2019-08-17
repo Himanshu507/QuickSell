@@ -84,18 +84,6 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(temp.getContext(), 2));
         recyclerView.setAdapter(main_views_adapter);
 
-        /*noteRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    Add_item_model item = documentSnapshot.toObject(Add_item_model.class);
-                    items_list.add(item);
-                }
-                Main_Views_Adapter main_views_adapter = new Main_Views_Adapter(temp.getContext(), "HomeFragment", items_list);
-                recyclerView.setLayoutManager(new GridLayoutManager(temp.getContext(), 2));
-                recyclerView.setAdapter(main_views_adapter);
-            }
-        });*/
     }
 
     private void init_Views(View view) {

@@ -23,13 +23,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.himanshu.quicksell.Model.Add_item_model;
+import com.himanshu.quicksell.Model.Add_item_model;
 import com.himanshu.quicksell.Model.User_Model;
 import com.himanshu.quicksell.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main_Views_Adapter extends FirestoreRecyclerAdapter<Add_item_model, Main_Views_Adapter.MyViewHolder> {
+public class Fav_View_Adapter extends FirestoreRecyclerAdapter<Add_item_model, Fav_View_Adapter.MyViewHolder> {
+
 
     private Context mContext;
     FirebaseFirestore db;
@@ -38,26 +40,25 @@ public class Main_Views_Adapter extends FirestoreRecyclerAdapter<Add_item_model,
     User_Model user_model;
     CollectionReference collectionReference;
 
-    public Main_Views_Adapter(@NonNull FirestoreRecyclerOptions<Add_item_model> options, Context mContext) {
+    public Fav_View_Adapter(@NonNull FirestoreRecyclerOptions<Add_item_model> options, Context mContext) {
         super(options);
         this.mContext = mContext;
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Fav_View_Adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(parent.getContext());
         view = mInflater.inflate(R.layout.main_recycler_item, parent, false);
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users");
         documentReference = collectionReference.document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        return new MyViewHolder(view);
+        return new Fav_View_Adapter.MyViewHolder(view);
     }
 
-
     @Override
-    protected void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i, @NonNull final Add_item_model add_item_model) {
+    protected void onBindViewHolder(@NonNull final Fav_View_Adapter.MyViewHolder myViewHolder, int i, @NonNull final Add_item_model add_item_model) {
         String url = add_item_model.getProduct_images().get(0);
         Glide.with(mContext).load(url).into(myViewHolder.product_img);
         myViewHolder.title.setText(add_item_model.getTitle());
@@ -69,13 +70,12 @@ public class Main_Views_Adapter extends FirestoreRecyclerAdapter<Add_item_model,
             public void onClick(View view) {
                 DocumentSnapshot snapshot = getSnapshots().getSnapshot(myViewHolder.getAdapterPosition());
                 snapshot.getId();
-                document_id.add(snapshot);
-                user_model = new User_Model(document_id);
-
-                documentReference.update("fav", FieldValue.arrayUnion(snapshot)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                Glide.with(mContext).load(R.drawable.ic_favorite_color).into(myViewHolder.fav_img);
+                
+                documentReference.update("fav", FieldValue.arrayRemove(snapshot)).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Glide.with(mContext).load(R.drawable.ic_favorite_color).into(myViewHolder.fav_img);
+                        Glide.with(mContext).load(R.drawable.fav_border).into(myViewHolder.fav_img);
                         Toast.makeText(mContext, "Successfully Created", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
