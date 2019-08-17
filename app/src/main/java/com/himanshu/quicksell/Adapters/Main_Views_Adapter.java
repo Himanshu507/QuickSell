@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.himanshu.quicksell.Model.Add_item_model;
@@ -73,20 +74,20 @@ public class Main_Views_Adapter extends FirestoreRecyclerAdapter<Add_item_model,
                 snapshot.getId();
                 document_id.add(snapshot);
                 user_model = new User_Model(document_id);
-                documentReference.set(user_model, SetOptions.merge())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Glide.with(mContext).load(R.drawable.ic_favorite_color).into(myViewHolder.fav_img);
-                                Toast.makeText(mContext, "Successfully Created", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(mContext, "Something Went Wrong..", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+
+                documentReference.update("fav", FieldValue.arrayUnion(snapshot)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Glide.with(mContext).load(R.drawable.ic_favorite_color).into(myViewHolder.fav_img);
+                        Toast.makeText(mContext, "Successfully Created", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mContext, "Something Went Wrong..", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
     }

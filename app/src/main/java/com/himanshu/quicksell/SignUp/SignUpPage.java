@@ -23,14 +23,25 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.himanshu.quicksell.MainActivity;
+import com.himanshu.quicksell.Model.User_Model;
 import com.himanshu.quicksell.NetworkManager.NetworkChangeReceiver;
 import com.himanshu.quicksell.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignUpPage extends AppCompatActivity {
 
@@ -40,6 +51,11 @@ public class SignUpPage extends AppCompatActivity {
     static Button login_btn;
     static TextView SignUp;
     private FirebaseAuth mAuth;
+    List<DocumentSnapshot> document_id = new ArrayList<DocumentSnapshot>();
+    DocumentReference documentReference;
+    User_Model user_model;
+    CollectionReference collectionReference;
+    FirebaseFirestore db;
 
     public static void dialogg(boolean value) {
 
@@ -78,6 +94,10 @@ public class SignUpPage extends AppCompatActivity {
 
         mNetworkReceiver = new NetworkChangeReceiver();
         registerNetworkBroadcastForNougat();
+
+        db = FirebaseFirestore.getInstance();
+        collectionReference = db.collection("Users");
+        user_model = new User_Model(document_id);
     }
 
     public void init_Views() {
@@ -159,8 +179,21 @@ public class SignUpPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            documentReference = collectionReference.document(user.getUid());
+                            documentReference.set(user_model)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            updateUI(user);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getApplicationContext(),"Something Went Wrong..",Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             username.setError("User with this email already exist.");
