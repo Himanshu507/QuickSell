@@ -24,13 +24,14 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.himanshu.quicksell.Model.Add_item_model;
 import com.himanshu.quicksell.Model.Add_item_model;
+import com.himanshu.quicksell.Model.Fav_Model;
 import com.himanshu.quicksell.Model.User_Model;
 import com.himanshu.quicksell.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fav_View_Adapter extends FirestoreRecyclerAdapter<Add_item_model, Fav_View_Adapter.MyViewHolder> {
+public class Fav_View_Adapter extends FirestoreRecyclerAdapter<Fav_Model, Fav_View_Adapter.MyViewHolder> {
 
 
     private Context mContext;
@@ -40,7 +41,7 @@ public class Fav_View_Adapter extends FirestoreRecyclerAdapter<Add_item_model, F
     User_Model user_model;
     CollectionReference collectionReference;
 
-    public Fav_View_Adapter(@NonNull FirestoreRecyclerOptions<Add_item_model> options, Context mContext) {
+    public Fav_View_Adapter(@NonNull FirestoreRecyclerOptions<Fav_Model> options, Context mContext) {
         super(options);
         this.mContext = mContext;
     }
@@ -58,8 +59,8 @@ public class Fav_View_Adapter extends FirestoreRecyclerAdapter<Add_item_model, F
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final Fav_View_Adapter.MyViewHolder myViewHolder, int i, @NonNull final Add_item_model add_item_model) {
-        String url = add_item_model.getProduct_images().get(0);
+    protected void onBindViewHolder(@NonNull final Fav_View_Adapter.MyViewHolder myViewHolder, int i, @NonNull final Fav_Model add_item_model) {
+        /*String url = add_item_model.getProduct_images().get(0);
         Glide.with(mContext).load(url).into(myViewHolder.product_img);
         myViewHolder.title.setText(add_item_model.getTitle());
         String rs = mContext.getResources().getString(R.string.Rs);
@@ -86,7 +87,7 @@ public class Fav_View_Adapter extends FirestoreRecyclerAdapter<Add_item_model, F
                 });
 
             }
-        });
+        });*/
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

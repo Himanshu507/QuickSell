@@ -24,12 +24,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.himanshu.quicksell.Adapters.Fav_View_Adapter;
+import com.himanshu.quicksell.Adapters.Main_Views_Adapter;
+import com.himanshu.quicksell.Add_Item;
 import com.himanshu.quicksell.Model.Add_item_model;
 import com.himanshu.quicksell.Model.Fav_Model;
 import com.himanshu.quicksell.R;
 
+import org.w3c.dom.ls.LSInput;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FavFragment extends Fragment {
 
@@ -40,18 +45,18 @@ public class FavFragment extends Fragment {
     Fav_View_Adapter fav_view_adapter;
     DocumentReference documentReference;
 
-  /*  @Override
-    public void onStart() {
-        super.onStart();
-        fav_view_adapter.startListening();
-    }
+    /*  @Override
+      public void onStart() {
+          super.onStart();
+          fav_view_adapter.startListening();
+      }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        fav_view_adapter.stopListening();
-    }
-*/
+      @Override
+      public void onStop() {
+          super.onStop();
+          fav_view_adapter.stopListening();
+      }
+  */
     public static FavFragment newInstance() {
         return new FavFragment();
         // Required empty public constructor
@@ -82,13 +87,26 @@ public class FavFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot document = task.getResult();
-                List<String> groupp = (List<String>) document.get("fav");
-               /* List<Fav_Model> group = (List<Fav_Model>) document.get("fav");
-                List<Add_item_model> add_item_models = new ArrayList<>();
-                for (int i = 0 ;i<group.size();i++){
-                    add_item_models.add(group.get(i));
-                }*/
-                Log.d("TAG", groupp.toString());
+
+
+                List<Fav_Model> groupp = (List<Fav_Model>) document.get("fav");
+
+                Map<String, Object> map = document.getData();
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    if (entry.getKey().equals("itemMore")) {
+                        Log.d("TAG", entry.getValue().toString());
+                    }
+                }
+
+                /*main_views_adapter = new Main_Views_Adapter(options, getContext());
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new GridLayoutManager(temp.getContext(), 2));
+                recyclerView.setAdapter(main_views_adapter);*/
+
+               /* fav_view_adapter = new Fav_View_Adapter(options, getContext());
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new GridLayoutManager(temp.getContext(), 2));
+                recyclerView.setAdapter(fav_view_adapter);*/
             }
         });
     }

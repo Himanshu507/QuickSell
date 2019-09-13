@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Fav_Model extends Add_item_model {
-    List<User_Model> fav = new ArrayList<>();
+    List<Add_item_model> fav = new ArrayList<>();
 
-    public Fav_Model(List<User_Model> fav) {
+    public Fav_Model(List<Add_item_model> fav) {
         this.fav = fav;
     }
 
-    public List<User_Model> getFav() {
+    public List<Add_item_model> getFav() {
         return fav;
     }
 
-    public void setFav(List<User_Model> fav) {
+    public void setFav(List<Add_item_model> fav) {
         this.fav = fav;
     }
 }
